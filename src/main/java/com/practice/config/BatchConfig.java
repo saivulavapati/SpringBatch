@@ -20,6 +20,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.core.task.TaskExecutor;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import com.practice.entity.Person;
@@ -37,8 +39,8 @@ public class BatchConfig {
                 .resource(new FileSystemResource(filePath))
                 .linesToSkip(1) // skip header
                 .delimited()
-                .names("id","firstName","lastName","email")
-                .targetType(Person.class)
+                .names("id","firstName","lastName","email","user_status","create_ts")
+                .fieldSetMapper(new PersonFieldSetMapper())
                 .build();
     }
 
@@ -47,13 +49,22 @@ public class BatchConfig {
     public JdbcBatchItemWriter<Person> writer(DataSource dataSource) {
         JdbcBatchItemWriter<Person> writer = new JdbcBatchItemWriter<>();
         writer.setDataSource(dataSource);
-        writer.setSql("INSERT INTO person (id, first_name, last_name, email) " +
-                      "VALUES (:id, :firstName, :lastName, :email)");
+        writer.setSql("INSERT INTO person (id,first_name, last_name,email,user_status,create_ts) " +
+                      "VALUES (:id,:firstName, :lastName,:email,:userStatus,:createTs)");
         writer.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>());
         writer.afterPropertiesSet();
         return writer;
     }
 
+    @Bean
+    public PersonSkipPolicy skipPolicy() {
+    	return new PersonSkipPolicy();
+    }
+    
+    @Bean
+    public PersonSkipListener skipListener() {
+        return new PersonSkipListener();
+    }
     // Step using StepBuilder and chunk processing
     @Bean
     public Step importStep(JobRepository jobRepository,
@@ -65,9 +76,14 @@ public class BatchConfig {
                 .<Person, Person>chunk(10000, transactionManager) // large chunk for performance
                 .reader(reader)
                 .writer(writer)
-                .taskExecutor(taskExecutor()) // multi-threaded
+                .faultTolerant()
+                .skipPolicy(skipPolicy())
+                .listener(skipListener()) 
+                .taskExecutor(taskExecutor()) 
                 .build();
     }
+    
+    
 
     // Job using JobBuilder
     @Bean

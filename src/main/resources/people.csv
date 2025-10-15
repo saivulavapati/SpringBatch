@@ -1,21 +1,21 @@
-firstName,lastName
-John,Doe
-Jane,Smith
-Michael,Brown
-Emily,Johnson
-David,Williams
-Sophia,Miller
-Daniel,Garcia
-Olivia,Martinez
-James,Rodriguez
-Isabella,Lopez
-John,Doe
-Jane,Smith
-Michael,Brown
-Emily,Johnson
-David,Williams
-Sophia,Miller
-Daniel,Garcia
-Olivia,Martinez
-James,Rodriguez
-Isabella,Lopez
+firstName,lastName,user_status,create_ts
+John,",",NULL,09-05-2025 11:44
+Jane,Smith,NULL,10-05-2025 11:44
+Michael,Brown,NULL,11-05-2025 11:44
+Emily,Johnson,NULL,12-05-2025 11:44
+David,Williams,NULL,13-05-2025 11:44
+Sophia,Miller,NULL,14-05-2025 11:44
+Daniel,Garcia,NULL,15-05-2025 11:44
+Olivia,Martinez,NULL,16-05-2025 11:44
+James,Rodriguez,NULL,17-05-2025 11:44
+Isabella,Lopez,NULL,18-05-2025 11:44
+John,Doe,NULL,19-05-2025 11:44
+Jane,Smith,NULL,20-05-2025 11:44
+Michael,Brown,NULL,21-05-2025 11:44
+Emily,Johnson,NULL,22-05-2025 11:44
+David,Williams,NULL,23-05-2025 11:44
+Sophia,Miller,NULL,24-05-2025 11:44
+Daniel,Garcia,NULL,25-05-2025 11:44
+Olivia,Martinez,NULL,26-05-2025 11:44
+James,Rodriguez,NULL,27-05-2025 11:44
+Isabella,Lopez,NULL,28-05-2025 11:44
